@@ -299,3 +299,17 @@ Complétez ce code avec une fonctionnalité de création de `TodoItem`  persist�
 #Voir le code push de l'exo 2#
 
 ---
+
+# Exercice 3 - Ecriture de tests
+_Temps estimé : 20 mins_
+
+* Rester sur le même code que l'exercice 2
+
+* Implémentez (en junit) des TU sur la règle de gestion qui consiste à afficher `[LATE!]` dans la description d'un item en retard de plus de 24h.
+
+IMPORTANT: [Question] Quels types de tests devra-t-on écrire pour les adapteurs ? 
+
+IMPORTANT: [Question] Que teste-on dans ce cas ? 
+
+* S'il vous reste du temps, écrivez quelques uns de ces types de test.
+
