@@ -3,9 +3,8 @@
 NOTE: TP de deux slots de 1h20
 
 ## Nom des étudiants de ce binôme 
-WARNING: NE PAS OUBLIER DE MENTIONNER LES DEUX NOMS !
 
-#XXX# et #YYY#
+#Dorian Faure# et #Alexis Petit#
 
 Commentaires éventuels des étudiants : #XXXXXX#
 
