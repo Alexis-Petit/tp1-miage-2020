@@ -75,6 +75,10 @@ IMPORTANT: [Question]  Où se trouve le code métier (voir la règle de gestion 
 
 Le code métier se trouve dans la classe TodoListController.java. Il est implémenté par les méthodes `todoItems()` et `finalContent()`. Pour chaque `TodoItem` de la liste retournée par le repository, on vérifie si ce dernier date de plus de 24h. Si oui, alors on lui ajoute la note `[LATE!]`.
 
+Cette régle n'est pas facilement testable mais on peut utiliser le framework `mockito` afin d'effectuer ce test.
+
+Exemple :
+
 .TodoItemTest.class
 [source, java]
 ----
