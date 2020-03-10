@@ -46,24 +46,149 @@ _Temps estimé : 1 h_
 
 * Observer le code du projet `todolist-debut-ex1`
 
+___
 IMPORTANT: [Question]  Que constatez-vous  en terme de découpage du code ? Imaginez un projet d'entreprise constitué de centaines de classes ainsi structuré. Que risque-t-il d'arriver ?
 
+On constate que toutes les classes sont dans le même répertoire ce qui constitue un problèmes de séparation des responsabilités. 
+
+Sur un projet avec des centaines de classes il serait très difficile de s’y retrouver dans le code. 
+Une proposition d'arborescence respectant respectant l’architecture en couche serait :
+
+* persistence
+    - TodoItemRepository.java
+* domain
+    - TodoItem.java
+* configuration
+    - TodoListApplication.java
+* controller
+    - TodoListController
+
+___
 IMPORTANT: [Question]  Que se passe-t-il si l'on renomme une colonne de la base de donnée ?
 
+Si on renomme la colonne `time` de la base de données en `timestamp` alors spring ne serait plus capable de faire le mapping entre l’entité `TodoItem` définie dans `TodoItem.java` et la table `TodoItem` de la base `postgres`. 
+
+Pour corriger ce problème, il faudrait remplacer `time` par `timestamp` dans le fichier `TodoItem.java`.
+
+___
 IMPORTANT: [Question]  Où se trouve le code métier (voir la règle de gestion RG1) ? cette règle est-elle facilement testable par un test unitaire ? 
+
+Le code métier se trouve dans la classe TodoListController.java. Il est implémenté par les méthodes `todoItems()` et `finalContent()`. Pour chaque `TodoItem` de la liste retournée par le repository, on vérifie si ce dernier date de plus de 24h. Si oui, alors on lui ajoute la note `[LATE!]`.
+
+.TodoItemTest.class
+[source, java]
+----
+@ExtendWith(MockitoExtension.class)
+class TodoItemTest {
+
+@Mock
+private TodoRepository todoRepository;
+
+private TodoListController todoListController = new TodoListController(todoRepository);
+
+
+@Test
+public void should_get_all_todoItems_from_database() {
+    
+LocalDate date = LocalDate.parse("2000-12-31");
+Instant late = date.atStartOfDay(ZoneId.of("Europe/Paris")).toInstant();
+Instant notLate = Instant.now()
+TodoItem firstTodo = new TodoItem(1, late, ’faire le tp1’);
+TodoItem secondTodo = new TodoItem(2 , notLate, ’faire le tp2’);
+    
+//Given
+given(todoRepository.findAll()).willReturn(asList(firstBook, secondBook));
+
+//When
+List<TodoItem> allTodos = todoListController.todoItems();
+
+
+//Then
+assertThat(allTodos).get(0).getContent.contains(´[LATE!]´);
+//Then
+assertThat(allTodos).get(1).getContent.containsNot(´[LATE!]´);
+}
+----
+___ 
 
 * Lancer une base PostgreSQL en Docker :
 ```bash
 docker run --rm -it -e POSTGRES_PASSWORD=password -p 5432:5432 postgres
 ```
+
 IMPORTANT: [Question]  Expliquer cette ligne de commande (y compris les options utilisées)
+
+Cette commande permet de lancer un conteneur contenant une base de données en l’exposant sur le port 5443 : 
+
+* *dock run* : démarre le conteneur;
+* *--rm* : supprime automatiquement le conteneur à la fin de l’exécution ; 
+* *-i* : affiche les logs du conteneur (mode interactif) ;   
+* *-t* : permet d’avoir un pseudo-terminal (pour exécuter des commandes dans le conteneur une fois lancé) ; 
+* *-e POSTGRES_PASSWORD=password* : initialise la variable d’environnement POSTGRES_PASSWORD dans le conteneur  ; 
+* *-p 5432:5432* : redirige le port 5432 du conteneur sur le port 5432 de la machine hôte ; 
+* *postgres* : nom de l’image du conteneur à démarrer.
+
+___
 
 * Compléter le code manquant dans la méthode `TodoListController.createTodoItem()`
 
+On appel la méthode `save()` de `todoItemRepository` (héritée de `CrudRepository`)
+
+.createTodoItem()
+[source, java]
+----
+@PostMapping("/todos")
+@ResponseStatus(code = HttpStatus.CREATED)
+public void createTodoItem(@RequestBody TodoItem todoItem) {
+	this.todoItemRepository.save(todoItem);
+}
+----
+
+
+
+
 * Pourquoi `todoItemRepository` est-il `null` ? Quelle est la meilleure façon de l'injecter ? Modifier le code en conséquence.
+
+`todoItemRepository` n’est pas injecté, c’est pourquoi nous obtenons une `‘nullPointerException’`. Pour l’injecter par le constructeur qui est la meilleur manière de faire, il faut ajouté l’annotation `‘@Inject’` au constructeur.
 
 * Tester vos endpoints avec un client REST.
 
+Nos requêtes de test Insomnia se trouvent à la racine du projet de l’exercice 1.
+
+createTodoItem : 
+Requête : POST => localhost:8080/todos
+```json
+{
+    "id": "2",
+    "content": "hello",
+    "time": 1547111250
+}
+```
+Réponse : 201
+
+Requête todoItems : 
+Requête : GET => localhost:8080/todos
+Réponse : 
+```json
+[
+  {
+	"id": "1",
+	"time": "2017-08-14T12:17:47.720Z",
+	"content": "[LATE!]hello"
+  },
+  {
+	"id": "2",
+	"time": "2020-03-10T09:07:30Z",
+	"content": "hello"
+  },
+  {
+	"id": "3",
+	"time": "2019-01-10T09:07:30Z",
+	"content": "[LATE!]hello"
+  }
+]
+```
+___
 
 [NOTE]
 ====
