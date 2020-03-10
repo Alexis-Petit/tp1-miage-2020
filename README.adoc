@@ -225,10 +225,77 @@ Source : http://leanpub.com/get-your-hands-dirty-on-clean-architecture[Tom Hombe
   - la couche application qui contient tous les contrats : ports (interfaces) et les implémentations des ports d'entrée (ou "use case") et qui servent à orchestrer les entités.
   - la couche entités qui contient les entités (au sens DDD, pas au sens JPA). En général, classes complexes (méthodes riches, relations entre les entités,  pas de simples POJO anémiques)
 
+---
+
 IMPORTANT: [Question] En observant le code, donnez les grands principes de cette architecture et les illustrer par des exemples de code.
+
+
+Les 3 grands principes de l’architecture hexagonale sont : 
+
+* *Séparer explicitement Application, Domain, et Infrastructure*
+
+On constate cette séparation dans l’arborescence du projet : 
+====
+    /application
+        /port
+            /in
+            /out
+    /adapters
+        /persistence
+        /rest_api
+    /domain
+====
+
+* *Les dépendances vont vers le Domain*
+
+La classe TodoItem appartenant au Domain est utilisée par les autres modules, mais elle ne dépend d’aucun d’entre eux.
+
+* *Séparation des entrées et des sorties :* 
+
+On retrouve deux classes exposant l’entité du domaine : 
+
+    - in/GetTodoItems.java 
+    - out/LoadTodoItems.java
+
+Dans une application réelle, la classe LoadTodoItems, qui pourra être utilisée par une API n’exposera pas forcément tous les attributs de l’entité métier TodoItem. 
+
+*Le out dépend du in mais jamais l’inverse*
+
+
+---
 
 IMPORTANT: [Question] Avec quel pattern est implémenté ici le principe d'inversion de dépendance ? (par exemple le domaine n'a aucune dépendance directe vers l'adaptateur JPA de persistence mais pourtant, il cette dernière est appelé _in fine_). Précisez les lignes de code importantes.
 
+Le principe d’inversion de dépendance est implémenté ici avec le pattern d’injection de dépendance (Dependency injection). 
+
+.TodoItemPersistenceAdapter()
+[source, java]
+----
+@Inject
+public TodoItemPersistenceAdapter(TodoItemRepository todoItemRepository, TodoItemMapper mapper) {
+		super();
+		this.todoItemRepository = todoItemRepository;
+		this.mapper = mapper;
+}
+----
+
+---
+
 IMPORTANT: [Question] Qu'est ce que l'anti-pattern domaine anémique ? à quoi le reconnaît-on ? Est-il courant dans les modèles en couche classiques ? L'architecture hexagonale change-t-elle cette situation ?
 
+L’anti-pattern domaine anémique consiste à créer des entités du domaine ne comportant peu ou pas de de règles de comportement métier. Un exemple type de domaine anémique serait une classe comportant uniquement des propriétés, getters et des setters, sans aucune règle de comportement ou métier. 
+
+*_“The catch comes when you look at the behavior, and you realize that there is hardly any behavior on these objects, making them little more than bags of getters and setters.”_* Martin Fowler
+
+L’anti-pattern domaine anémique se reconnaît facilement, en effet les classes domaines ne comprennent pas de règle métier, mais seulement les getters et setters. 
+
+Etant donné que l’architecture hégagoanale vise à concentrer la gestion des comportements métier dans le domaine, on peut dire qu’elle permet d’éviter l’anti-pattern domaine anémique. 
+
+
+---
+
 Complétez ce code avec une fonctionnalité de création de `TodoItem`  persisté en base et appelé depuis un endpoint REST `POST /todos` qui renvoi un code `201` en cas de succès. La fonctionnalité à implémenter est contractualisée par le port d'entrée `AjouterTodoItems`.
+
+#Voir le code push de l'exo 2#
+
+---
