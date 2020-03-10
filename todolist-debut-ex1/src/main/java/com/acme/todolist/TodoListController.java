@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ public class TodoListController {
 	private static final String LATE = "[LATE!]";
 	private TodoItemRepository todoItemRepository;
 
+	@Inject
 	public TodoListController(TodoItemRepository todoItemRepository) {
 		super();
 		this.todoItemRepository = todoItemRepository;
