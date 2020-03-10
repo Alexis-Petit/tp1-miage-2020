@@ -34,6 +34,11 @@ public class TodoListController {
 		this.getTodoItemsQueryService = getTodoItemsQueryService;
 	}
 	
+	@Inject
+	public TodoListController(PostTodoItemsService postTodoItemsQueryService) {
+		this.postTodoItemsQueryService = postTodoItemsQueryService;
+	}
+	
 	@GetMapping("/todos")
 	public List<TodoItem> getAllTodoItems() {
 		return this.getTodoItemsQueryService.getAllTodoItems();
@@ -42,9 +47,8 @@ public class TodoListController {
 	@PostMapping("/todos")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public void createTodoItem(@RequestBody TodoItem todoItem) {
-		this.postTodoItemsQueryService.createTodoItem(todoItem);
+		postTodoItemsQueryService.createTodoItem(todoItem);
 	}
-
 
 
 }
