@@ -24,20 +24,17 @@ import com.acme.todolist.domain.TodoItem;
 @RestController
 public class TodoListController {
 	
-	
 	private GetTodoItemsService getTodoItemsQueryService;
 	private PostTodoItemsService postTodoItemsQueryService;
 	
 	
 	@Inject
-	public TodoListController(GetTodoItemsService getTodoItemsQueryService) {
+	public TodoListController(PostTodoItemsService postTodoItemsQueryService, GetTodoItemsService getTodoItemsQueryService) {
 		this.getTodoItemsQueryService = getTodoItemsQueryService;
-	}
-	
-	@Inject
-	public TodoListController(PostTodoItemsService postTodoItemsQueryService) {
 		this.postTodoItemsQueryService = postTodoItemsQueryService;
 	}
+	
+
 	
 	@GetMapping("/todos")
 	public List<TodoItem> getAllTodoItems() {
