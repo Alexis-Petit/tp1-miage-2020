@@ -84,11 +84,11 @@ public void should_get_all_todoItems_from_database() {
 LocalDate date = LocalDate.parse("2000-12-31");
 Instant late = date.atStartOfDay(ZoneId.of("Europe/Paris")).toInstant();
 Instant notLate = Instant.now()
-TodoItem firstTodo = new TodoItem(1, late, ’faire le tp1’);
-TodoItem secondTodo = new TodoItem(2 , notLate, ’faire le tp2’);
+TodoItem firstTodo = new TodoItem("1", late, ’faire le tp1’);
+TodoItem secondTodo = new TodoItem("2" , notLate, ’faire le tp2’);
     
 //Given
-given(todoRepository.findAll()).willReturn(asList(firstBook, secondBook));
+given(todoRepository.findAll()).willReturn(asList(firstTodo, secondTodo));
 
 //When
 List<TodoItem> allTodos = todoListController.todoItems();
