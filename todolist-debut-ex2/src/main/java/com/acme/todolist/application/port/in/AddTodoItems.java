@@ -2,7 +2,7 @@ package com.acme.todolist.application.port.in;
 
 import com.acme.todolist.domain.TodoItem;
 
-public interface AjouterTodoItems {
+public interface AddTodoItems {
 	
 	/**
 	 * Ajoute un item dans la liste

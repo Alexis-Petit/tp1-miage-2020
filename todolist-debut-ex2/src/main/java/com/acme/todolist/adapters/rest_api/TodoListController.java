@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.acme.todolist.application.service.GetTodoItemsService;
-import com.acme.todolist.application.service.PostTodoItemsService;
+import com.acme.todolist.application.port.in.AddTodoItems;
+import com.acme.todolist.application.port.in.GetTodoItems;
 import com.acme.todolist.domain.TodoItem;
 
 /**
@@ -24,27 +24,27 @@ import com.acme.todolist.domain.TodoItem;
 @RestController
 public class TodoListController {
 	
-	private GetTodoItemsService getTodoItemsQueryService;
-	private PostTodoItemsService postTodoItemsQueryService;
+	private GetTodoItems getTodoItemsQuery;
+	private AddTodoItems addTodoItemsQuery;
 	
 	
 	@Inject
-	public TodoListController(PostTodoItemsService postTodoItemsQueryService, GetTodoItemsService getTodoItemsQueryService) {
-		this.getTodoItemsQueryService = getTodoItemsQueryService;
-		this.postTodoItemsQueryService = postTodoItemsQueryService;
-	}
+	public TodoListController(AddTodoItems addTodoItemsQuery, GetTodoItems getTodoItemsQuery) {
+		this.getTodoItemsQuery = getTodoItemsQuery;
+		this.addTodoItemsQuery = addTodoItemsQuery;
+	}	
 	
 
 	
 	@GetMapping("/todos")
 	public List<TodoItem> getAllTodoItems() {
-		return this.getTodoItemsQueryService.getAllTodoItems();
+		return this.getTodoItemsQuery.getAllTodoItems();
 	}
 	
 	@PostMapping("/todos")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public void createTodoItem(@RequestBody TodoItem todoItem) {
-		postTodoItemsQueryService.createTodoItem(todoItem);
+		addTodoItemsQuery.addTodoItem(todoItem);
 	}
 
 

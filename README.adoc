@@ -65,11 +65,11 @@ Une proposition d'arborescence respectant respectant l’architecture en couche 
 
 *Où se trouve le code métier (voir la règle de gestion RG1) ? Cette règle est-elle facilement testable par un test unitaire ?*
 
-Le code métier se trouve dans la classe TodoListController.java. Il est implémenté par les méthodes todoItems() et finalContent(). Pour chaque TodoItem de la liste retournée par le repository, on vérifie si ce dernier date de plus de 24h. Si oui, alors on lui ajoute la note [LATE!].
+  Le code métier se trouve dans la classe TodoListController.java. Il est implémenté par les méthodes todoItems() et finalContent(). Pour chaque TodoItem de la liste retournée par le repository, on vérifie si ce dernier date de plus de 24h. Si oui, alors on lui ajoute la note [LATE!].
 
-Cette règle n'est pas facilement testable car elle nécessite de mocker les services et repository. 
+  Cette règle n'est pas facilement testable car elle nécessite de mocker les services et repository. 
 
-Voici un exemple de test unitaire : 
+  Voici un exemple de test unitaire utilisant mockito: 
 
 ```java
 @Mock
@@ -107,7 +107,7 @@ docker run --rm -it -e POSTGRES_PASSWORD=password -p 5432:5432 postgres
 ```
 *Expliquer cette ligne de commande (y compris les options utilisées)*
 
-Cette commande permet de lancer un conteneur contenant une base de données en l’exposant sur le port 5432 : 
+  Cette commande permet de lancer un conteneur contenant une base de données en l’exposant sur le port 5432 : 
 
 * docker run : démarre le conteneur
 * --rm : supprime automatiquement le conteneur à la fin de l’exécution ; 
@@ -129,15 +129,15 @@ public void createTodoItem(@RequestBody TodoItem todoItem) {
 
 *Pourquoi `todoItemRepository` est-il `null` ? Quelle est la meilleure façon de l'injecter ?*
 
-todoItemRepository n’est pas injecté, c’est pourquoi nous obtenons une ‘nullPointerException’. Pour l’injecter par le constructeur qui est la meilleur manière de faire, il faut ajouté l’annotation ‘@Inject’ au constructeur.
+  todoItemRepository n’est pas injecté, c’est pourquoi nous obtenons une ‘nullPointerException’. Pour l’injecter par le constructeur qui est la meilleur manière de faire, il faut ajouté l’annotation ‘@Inject’ au constructeur.
 
 * Modifier le code en conséquence.
 
 * Tester vos endpoints avec un client REST.
 
-Nos requêtes de test Insomnia se trouvent à la racine du projet de l’exercice1.
+  Nos requêtes de test Insomnia se trouvent à la racine du projet de l’exercice1.
 
-* createTodoItem : 
+  *   createTodoItem : 
 Requête : POST => localhost:8080/todos
 ```json
 {
@@ -206,6 +206,12 @@ Source : http://leanpub.com/get-your-hands-dirty-on-clean-architecture[Tom Hombe
   - la couche entités qui contient les entités (au sens DDD, pas au sens JPA). En général, classes complexes (méthodes riches, relations entre les entités,  pas de simples POJO anémiques)
 
 *Rappeler en quelques lignes les grands principes de cette architecture.*
+
+  L’architecture hexagonale place les entrées et les sorties aux extrémitées du système. La logique métier ne dépend pas de l’accès aux données, que ce soit par des micro-services REST, GraphQL, une base de données ou un fichier CSV. 
+  La logique métier est isolée des problématiques externes à l’application. 
+  Cette séparation induit également une faible dépendance entre le code métier et l’accès aux données, il est donc facile de changer de base de données, ou encore de protocole de communication : faire évoluer une API REST vers une API GraphQL par exemple.
+  Les protocoles de test sont eux aussi simplifiés car on peut tester la logique métier sans avoir à mocker différents systèmes d’accès aux données.
+
 
 Complétez ce code avec une fonctionnalité de création de `TodoItem`  persisté en base et appelé depuis un endpoint REST `POST /todos` qui :
 

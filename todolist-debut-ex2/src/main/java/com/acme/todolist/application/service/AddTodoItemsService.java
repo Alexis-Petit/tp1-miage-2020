@@ -4,19 +4,20 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
+import com.acme.todolist.application.port.in.AddTodoItems;
 import com.acme.todolist.application.port.out.UpdateTodoItem;
 import com.acme.todolist.domain.TodoItem;
 
 @Component
-public class PostTodoItemsService {
+public class AddTodoItemsService implements AddTodoItems {
 	private UpdateTodoItem updateTodoItem;
 	
 	@Inject
-	public PostTodoItemsService(UpdateTodoItem updateTodoItem) {
+	public AddTodoItemsService(UpdateTodoItem updateTodoItem) {
 		this.updateTodoItem = updateTodoItem;
 	}
 	
-	public void createTodoItem(TodoItem todoItem) {
+	public void addTodoItem(TodoItem todoItem) {
 		this.updateTodoItem.storeNewTodoItem(todoItem);;
 	}
 }
