@@ -17,7 +17,6 @@ public class TodoItemTests {
 		LocalDate date = LocalDate.parse("2000-12-31");
 		Instant late = date.atStartOfDay(ZoneId.of("Europe/Paris")).toInstant();
 		TodoItem todo = new TodoItem("1", late, "this todo is late");
-		System.out.println(todo.finalContent());
 
 		assertTrue(todo.finalContent().contains(LATE));
 	}
@@ -26,7 +25,6 @@ public class TodoItemTests {
 	public void finalContent_todoIsNotLate() {
 		Instant notLate = Instant.now();
 		TodoItem todo = new TodoItem("2", notLate, "this todo is not late");
-		System.out.println(todo.finalContent());
 
 		assertTrue(!todo.finalContent().contains(LATE));
 	}
