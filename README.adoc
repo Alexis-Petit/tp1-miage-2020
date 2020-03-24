@@ -107,9 +107,9 @@ docker run --rm -it -e POSTGRES_PASSWORD=password -p 5432:5432 postgres
 ```
 *Expliquer cette ligne de commande (y compris les options utilisées)*
 
-Cette commande permet de lancer un conteneur contenant une base de données en l’exposant sur le port 5443 : 
+Cette commande permet de lancer un conteneur contenant une base de données en l’exposant sur le port 5432 : 
 
-* dock run : démarre le conteneur
+* docker run : démarre le conteneur
 * --rm : supprime automatiquement le conteneur à la fin de l’exécution ; 
 * -i : affiche les logs du conteneur (mode interactif) ;   
 * -t : permet d’avoir un pseudo-terminal (pour exécuter des commandes dans le conteneur une fois lancé) ; 
