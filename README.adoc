@@ -227,11 +227,18 @@ _Temps estimé : 20 mins_
 
 * Implémentez (en junit) des TU sur la règle de gestion qui consiste à afficher `[LATE!]` dans la description d'un item en retard de plus de 24h.
 
-*Quels types de tests devra-t-on écrire pour les adapteurs ?* 
+*Quels types de tests devra-t-on écrire pour les adapteurs ?*
+
+ Les types de tests à écrire pour les adapteurs sont les tests d'intégration.
 
 *Que teste-on dans ce cas ?*
 
+  Dans ce cas on vérifie la compatiblité entre les modules.
+
 *S'il vous reste du temps, écrivez quelques uns de ces types de test.*
+
+ Nous avons écrit un test d'intégration pour le controlleur de l'application. Ce dernier simule une requête POST sur le endpoint /todos contenant un TodoItem et est valide si le serveur répond un code 201.
+ Nous n'avons pas pu le tester dû à un probléme de configuration Spring. Cependant, nous pensons que ce test est valide. 
 
 [TIP]
 =====
