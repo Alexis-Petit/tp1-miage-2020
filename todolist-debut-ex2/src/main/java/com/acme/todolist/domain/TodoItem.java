@@ -61,7 +61,7 @@ public class TodoItem {
 	 * 
 	 * @return liste des items
 	 */
-	String finalContent() {
+	public String finalContent() {
 		return isLate()? LATE+getContent() :  getContent();
 	}
 
